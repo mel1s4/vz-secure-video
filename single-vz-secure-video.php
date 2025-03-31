@@ -2,16 +2,28 @@
   $base_url = get_bloginfo('url');
   $id = get_the_ID();
   $media_id = get_post_meta( $id, '_vz_secure_video_file', true );
-  $secure_video_folder = '/vz-secure_video/' . $media_id . '/';
   $upload_dir = wp_upload_dir();
-  $destination_path = $upload_dir['basedir'] . $secure_video_folder;
-  // get the firs folder inside destination_path
-  $first_folder = glob($destination_path . '/*' , GLOB_ONLYDIR);
-  $first_folder = basename($first_folder[0]);
+  
+  if ( empty( $media_id ) ) {
+    $media_filepath = get_post_meta( $id, '_vz_secure_video_filepath', true );
+    $destination_path = $upload_dir['basedir'] . '/vz-secure_video/' . $media_filepath;
+    // get first file m3u8 inside the destination_path
+    $first_file = glob($destination_path . '/*.m3u8');
+    $first_file = basename($first_file[0]);
+    $video = $upload_dir['baseurl'] . '/vz-secure_video/' . $media_filepath . '/' . $first_file;
+  } else {
+    $name = get_the_title( $media_id );
+    $secure_video_folder = '/vz-secure_video/' . $media_id;
+    $destination_path = $upload_dir['basedir'] . $secure_video_folder;
+    // get the firs folder inside destination_path
+    $first_folder = glob($destination_path . '/*' , GLOB_ONLYDIR);
+    $first_folder = basename($first_folder[0]);
+    $first_file = glob($destination_path . '/' . $first_folder . '/*.m3u8');
+    $first_file = basename($first_file[0]);
+    $video = $upload_dir['baseurl'] . $secure_video_folder . '/' . $first_folder . '/' . $first_file;
+  }
+
   // get the first file .m3u8 inside the first folder
-  $first_file = glob($destination_path . '/' . $first_folder . '/*.m3u8');
-  $first_file = basename($first_file[0]);
-  $video = $upload_dir['baseurl'] . $secure_video_folder . $first_folder . '/' . $first_file;
   $plugin_url = plugin_dir_url( __FILE__ );
   $styles = $plugin_url . 'player.css';
   $js = $plugin_url . 'js/frontend.js';

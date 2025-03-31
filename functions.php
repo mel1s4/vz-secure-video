@@ -276,6 +276,15 @@ function vz_save_secure_video_file_meta_box_data( $post_id ) {
     }
   }
 
+  if ( isset( $_POST['vz_secure_video_filepath'] ) ) {
+    $filepath = sanitize_text_field( $_POST['vz_secure_video_filepath'] );
+    if ( empty( $filepath ) ) {
+      delete_post_meta( $post_id, '_vz_secure_video_filepath' );
+    } else {
+      update_post_meta( $post_id, '_vz_secure_video_filepath', $filepath );
+    }
+  }
+
 }
 add_action( 'save_post', 'vz_save_secure_video_file_meta_box_data' );
 
