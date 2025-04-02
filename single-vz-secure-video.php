@@ -29,9 +29,14 @@
   $js = $plugin_url . 'js/frontend.js';
 
   if (!vz_sv_current_user_can_view($id)) {
-    // Redirect to the home page
-    wp_redirect( home_url() );
+    $redirect_path = get_post_meta( $id, '_vz_secure_video_redirect', true );
+    if ( ! empty( $redirect_path ) ) {
+      wp_redirect( $redirect_path );
+      exit;
+    } else {
+      echo '<h1>' . __('Permission Denied', 'vz-secure-video') . '</h1>';
     exit;
+  }
   }
 ?>
 <!DOCTYPE html>

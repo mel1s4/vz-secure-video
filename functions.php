@@ -285,6 +285,15 @@ function vz_save_secure_video_file_meta_box_data( $post_id ) {
     }
   }
 
+  if ( isset( $_POST['vz_secure_video_redirect'] ) ) {
+    $redirect = sanitize_text_field( $_POST['vz_secure_video_redirect'] );
+    if ( empty( $redirect ) ) {
+      delete_post_meta( $post_id, '_vz_secure_video_redirect' );
+    } else {
+      update_post_meta( $post_id, '_vz_secure_video_redirect', $redirect );
+    }
+  }
+
 }
 add_action( 'save_post', 'vz_save_secure_video_file_meta_box_data' );
 

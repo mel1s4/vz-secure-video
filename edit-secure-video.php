@@ -6,19 +6,29 @@
    $name = get_the_title( $value );
  }
  ?>
- <div class="wrap">
- <label for="vz_secure_video_file">
-    <?php _e( 'Set video filepath:', 'vz-secure-video' ); ?>
-   </label>
-    <input type="text" id="vz_secure_video_filepath" name="vz_secure_video_filepath" value="<?php echo esc_attr( $filepath ); ?>" />
-   <label for="vz_secure_video_file">
-    <?php _e( 'Upload a secure video file:', 'vz-secure-video' ); ?>
-   </label>
-  <input type="text" id="vz_secure_video_file_input" name="vz_secure_video_file" value="<?php echo esc_attr( $value ); ?>" size="25" />
-  <input type="text" id="vz_secure_video_file_name" value="<?php echo esc_attr( $name ); ?>" size="25" />
-  <input type="button" id="vz_secure_video_file_button" class="button" value="<?php esc_attr_e( 'Upload Video', 'vz-secure-video' ); ?>" />
+ <div class="vz-sv__meta-box">
+  <div class="input-group">
+    <label for="vz_secure_video_file">
+      <?php _e( 'Set video filepath:', 'vz-secure-video' ); ?>
+     </label>
+      <input type="text" id="vz_secure_video_filepath" name="vz_secure_video_filepath" value="<?php echo esc_attr( $filepath ); ?>" />
+  </div>
+  <div class="input-group">
+    <label for="vz_secure_video_file">
+     <?php _e( 'Upload a secure video file:', 'vz-secure-video' ); ?>
+    </label>
+   <input disabled type="text" id="vz_secure_video_file_input" name="vz_secure_video_file" value="<?php echo esc_attr( $value ); ?>" size="25" />
+   <input disabled type="text" id="vz_secure_video_file_name" value="<?php echo esc_attr( $name ); ?>" size="25" />
+   <input type="button" id="vz_secure_video_file_button" class="button" value="<?php esc_attr_e( 'Upload Video', 'vz-secure-video' ); ?>" />
+  </div>
+  <div class="input-group">
+    <label>
+      <?php _e( 'If denid, redirect to:', 'vz-secure-video' ); ?>
+    </label>
+    <input type="text" id="vz_secure_video_redirect" name="vz_secure_video_redirect" value="<?php echo esc_attr( get_post_meta( $post->ID, '_vz_secure_video_redirect', true ) ); ?>" />
+  </div>
 
-  <div class="give-permissions">
+  <div class="input-group">
     <label for="vz_secure_video_user_search">
       <?php _e( 'User:', 'vz-secure-video' ); ?>
     </label>

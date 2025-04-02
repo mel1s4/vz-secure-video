@@ -7,4 +7,9 @@ body {
   height: 100%;
   max-width: 100vw;
   max-height: 100vh;
+
 }
+#player:playing + vz-sv__player__image {
+  display: none;
+}
+
