@@ -9,6 +9,7 @@ import './VideoPlayer.scss';
 const VideoPlayer = ({ videoData }) => {
   const playerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
+  const hasTrackedView = useRef(false);
 
   // Plyr source configuration for video (supports both HLS and direct video)
   const plyrSource = useMemo(() => {
@@ -110,6 +111,65 @@ const VideoPlayer = ({ videoData }) => {
       }
     }
   }), []);
+
+  // Track video view on first play
+  useEffect(() => {
+    if (!playerRef.current || hasTrackedView.current) return;
+    
+    const trackVideoView = async () => {
+      if (hasTrackedView.current) return;
+      
+      try {
+        const response = await fetch(videoData.ajaxUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            action: 'vz_track_video_view',
+            post_id: videoData.postId,
+            nonce: videoData.viewTrackingNonce
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          hasTrackedView.current = true;
+          console.log('View tracked successfully:', data.data);
+        } else {
+          console.error('Failed to track view:', data.data?.message);
+        }
+      } catch (error) {
+        console.error('Error tracking view:', error);
+      }
+    };
+    
+    // Wait for player to be ready before attaching event listener
+    const timer = setTimeout(() => {
+      const player = playerRef.current?.plyr;
+      if (!player) {
+        console.warn('Player not ready for view tracking');
+        return;
+      }
+      
+      // Track when video starts playing
+      player.on('play', () => {
+        if (!hasTrackedView.current) {
+          trackVideoView();
+        }
+      });
+    }, 1000); // Wait 1 second for player to initialize
+    
+    // Cleanup
+    return () => {
+      clearTimeout(timer);
+      const player = playerRef.current?.plyr;
+      if (player) {
+        player.off('play');
+      }
+    };
+  }, [videoData]);
 
   // Initialize HLS.js for HLS video playback (only if HLS)
   useEffect(() => {

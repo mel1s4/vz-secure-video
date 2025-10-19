@@ -58,6 +58,10 @@ require_once VZ_SECURE_VIDEO_PLUGIN_DIR
     . 'includes/vz-secure-video-template-loader.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
     . 'includes/vz-secure-video-helpers.php';
+require_once VZ_SECURE_VIDEO_PLUGIN_DIR
+    . 'includes/vz-secure-video-database.php';
+require_once VZ_SECURE_VIDEO_PLUGIN_DIR
+    . 'includes/vz-secure-video-view-tracker.php';
 
 /**
  * Include admin functionality

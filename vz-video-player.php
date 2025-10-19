@@ -32,6 +32,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" crossorigin src="<?php echo esc_url($assets_folder . $js_file); ?>"></script>
+  <script>
+    // Make ajaxurl available for AJAX requests
+    window.ajaxurl = '<?php echo esc_js(admin_url('admin-ajax.php')); ?>';
+  </script>
   <link rel="stylesheet" crossorigin href="<?php echo esc_url($assets_folder . $css_file); ?>">
   <script>
     window.vzVideoData = {
@@ -42,6 +46,9 @@
       fileType: '<?php echo esc_js($file_type); ?>',
       isHls: <?php echo $is_hls ? 'true' : 'false'; ?>,
       postId: '<?php the_ID(); ?>',
+      viewTrackingNonce: '<?php echo wp_create_nonce('vz_track_view'); ?>',
+      ajaxUrl: '<?php echo esc_js(admin_url('admin-ajax.php')); ?>',
+      videoViews: '<?php echo vz_get_video_view_count($post_id); ?>',
       duration: '<?php $duration ?>',
       tags: '<?php $tags ?>',
       categories: '<?php $categories ?>',
