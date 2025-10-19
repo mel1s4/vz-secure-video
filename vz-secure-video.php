@@ -64,13 +64,19 @@ require_once VZ_SECURE_VIDEO_PLUGIN_DIR
 		. 'includes/vz-secure-video-view-tracker.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
 		. 'includes/vz-secure-video-permissions.php';
+require_once VZ_SECURE_VIDEO_PLUGIN_DIR
+		. 'includes/vz-user-data-export.php';
+require_once VZ_SECURE_VIDEO_PLUGIN_DIR
+		. 'includes/vz-user-data-deletion.php';
 
 /**
  * Include admin functionality
  */
 if (is_admin()) {
-		require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-				. 'admin/vz-secure-video-admin.php';
+	require_once VZ_SECURE_VIDEO_PLUGIN_DIR
+			. 'admin/vz-secure-video-admin.php';
+	require_once VZ_SECURE_VIDEO_PLUGIN_DIR
+			. 'includes/admin/vz-privacy-settings.php';
 }
 
 /**
