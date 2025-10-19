@@ -2,44 +2,44 @@
 @use '../styles/mixins' as *;
 
 .video-player-container {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
+	width: 100%;
+	max-width: 1280px;
+	margin: 0 auto;
 }
 
 .video-wrapper {
-  position: relative;
-  width: 100%;
-  background: #000;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-  .no-video-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    color: #fff;
-    font-size: 1.2rem;
-  }
-  
-  // Custom Plyr styling
-  :global(.plyr) {
-    border-radius: 8px;
-  }
-  
-  :global(.plyr__video-wrapper) {
-    background: #000;
-  }
-  
-  :global(.plyr__poster) {
-    background-size: cover;
-  }
-  
-  // Custom control colors
-  :global(.plyr--video) {
-    --plyr-color-main: #00d4ff;
-    --plyr-video-background: #000;
-  }
+	position: relative;
+	width: 100%;
+	background: #000;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	
+	.no-video-message {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 400px;
+		color: #fff;
+		font-size: 1.2rem;
+	}
+	
+	// Custom Plyr styling
+	:global(.plyr) {
+		border-radius: 8px;
+	}
+	
+	:global(.plyr__video-wrapper) {
+		background: #000;
+	}
+	
+	:global(.plyr__poster) {
+		background-size: cover;
+	}
+	
+	// Custom control colors
+	:global(.plyr--video) {
+		--plyr-color-main: #00d4ff;
+		--plyr-video-background: #000;
+	}
 }

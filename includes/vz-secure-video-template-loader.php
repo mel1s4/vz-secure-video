@@ -10,19 +10,19 @@
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
-    exit;
+		exit;
 }
 
 /**
  * Load custom template for secure video single posts
  */
 function vz_secure_video_load_template() {
-    if (is_singular('vz_secure_video')) {
-        // Load our custom template
-        include VZ_SECURE_VIDEO_PLUGIN_DIR
-            . 'templates/single-vz_secure_video.php';
-        exit;
-    }
+		if (is_singular('vz_secure_video')) {
+				// Load our custom template
+				include VZ_SECURE_VIDEO_PLUGIN_DIR
+						. 'templates/single-vz_secure_video.php';
+				exit;
+		}
 }
 
 // Hook into WordPress
