@@ -49,25 +49,25 @@ function vz_secure_video_deactivate() {
  * Include core functionality files
  */
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-post-type.php';
+		. 'includes/vz-sv-post-type.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-meta-boxes.php';
+		. 'includes/vz-sv-meta-boxes.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-file-handler.php';
+		. 'includes/vz-sv-file-handler.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-template-loader.php';
+		. 'includes/vz-sv-template-loader.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-helpers.php';
+		. 'includes/vz-sv-helpers.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-database.php';
+		. 'includes/vz-sv-database.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-view-tracker.php';
+		. 'includes/vz-sv-view-tracker.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-secure-video-permissions.php';
+		. 'includes/vz-sv-permissions.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-user-data-export.php';
+		. 'includes/vz-sv-user-data-export.php';
 require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-		. 'includes/vz-user-data-deletion.php';
+		. 'includes/vz-sv-user-data-deletion.php';
 
 /**
  * Include admin functionality
@@ -76,7 +76,7 @@ if (is_admin()) {
 	require_once VZ_SECURE_VIDEO_PLUGIN_DIR
 			. 'admin/vz-secure-video-admin.php';
 	require_once VZ_SECURE_VIDEO_PLUGIN_DIR
-			. 'includes/admin/vz-privacy-settings.php';
+			. 'includes/admin/vz-sv-privacy-settings.php';
 }
 
 /**

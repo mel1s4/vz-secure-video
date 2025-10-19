@@ -29,10 +29,15 @@ function vz_export_user_data($user_id, $format = 'json') {
 	}
 	
 	// Check if user can export their own data
-	if (!current_user_can('manage_options') && get_current_user_id() !== $user_id) {
+	if (!current_user_can('manage_options') 
+			&& get_current_user_id() !== $user_id
+	) {
 		return new WP_Error(
 			'permission_denied',
-			__('You do not have permission to export this user\'s data.', 'vz-secure-video')
+			__(
+				'You do not have permission to export this user\'s data.',
+				'vz-secure-video'
+			)
 		);
 	}
 	
@@ -266,9 +271,18 @@ function vz_format_user_data_csv($data) {
 	$csv[] = '';
 	$csv[] = '=== ANALYTICS ===';
 	$csv[] = 'Metric,Value';
-	$csv[] = sprintf('"Total Views","%d"', $data['analytics']['total_views']);
-	$csv[] = sprintf('"Total Watch Time (seconds)","%d"', $data['analytics']['total_watch_time']);
-	$csv[] = sprintf('"Average Watch Time (seconds)","%.2f"', $data['analytics']['average_watch_time']);
+	$csv[] = sprintf(
+		'"Total Views","%d"', 
+		$data['analytics']['total_views']
+	);
+	$csv[] = sprintf(
+		'"Total Watch Time (seconds)","%d"', 
+		$data['analytics']['total_watch_time']
+	);
+	$csv[] = sprintf(
+		'"Average Watch Time (seconds)","%.2f"', 
+		$data['analytics']['average_watch_time']
+	);
 	
 	if (!empty($data['analytics']['most_watched_videos'])) {
 		$csv[] = '';
@@ -296,20 +310,30 @@ function vz_is_data_export_enabled() {
  */
 function vz_ajax_export_user_data() {
 	// Check nonce
-	if (!isset($_REQUEST['nonce']) || !wp_verify_nonce($_REQUEST['nonce'], 'vz_export_data')) {
-		wp_send_json_error(array('message' => __('Security check failed.', 'vz-secure-video')));
+	if (!isset($_REQUEST['nonce']) 
+			|| !wp_verify_nonce($_REQUEST['nonce'], 'vz_export_data')
+	) {
+		wp_send_json_error(
+			array('message' => __('Security check failed.', 'vz-secure-video'))
+		);
 		return;
 	}
 	
-	$user_id = isset($_REQUEST['user_id']) ? intval($_REQUEST['user_id']) : 0;
-	$format = isset($_REQUEST['format']) ? sanitize_text_field($_REQUEST['format']) : 'json';
+	$user_id = isset($_REQUEST['user_id']) 
+			? intval($_REQUEST['user_id']) 
+			: 0;
+	$format = isset($_REQUEST['format']) 
+			? sanitize_text_field($_REQUEST['format']) 
+			: 'json';
 	
 	if (!$user_id) {
 		$user_id = get_current_user_id();
 	}
 	
 	if (!$user_id) {
-		wp_send_json_error(array('message' => __('Invalid user ID.', 'vz-secure-video')));
+		wp_send_json_error(
+			array('message' => __('Invalid user ID.', 'vz-secure-video'))
+		);
 		return;
 	}
 	
@@ -356,7 +380,9 @@ function vz_add_export_button_to_profile($user) {
 	}
 	
 	// Only show to admins or the user themselves
-	if (!current_user_can('manage_options') && get_current_user_id() !== $user->ID) {
+	if (!current_user_can('manage_options') 
+			&& get_current_user_id() !== $user->ID
+	) {
 		return;
 	}
 	?>
@@ -365,7 +391,13 @@ function vz_add_export_button_to_profile($user) {
 		<tr>
 			<th><?php _e('Export Your Data', 'vz-secure-video'); ?></th>
 			<td>
-				<p><?php _e('Download a copy of all your video viewing data in JSON or CSV format.', 'vz-secure-video'); ?></p>
+				<p>
+					<?php _e(
+						'Download a copy of all your video viewing data in ' .
+						'JSON or CSV format.',
+						'vz-secure-video'
+					); ?>
+				</p>
 				<p>
 					<a href="<?php echo esc_url(add_query_arg(array(
 						'action' => 'vz_export_user_data',
@@ -385,7 +417,11 @@ function vz_add_export_button_to_profile($user) {
 					</a>
 				</p>
 				<p class="description">
-					<?php _e('This will include your video permissions, view history, and analytics data.', 'vz-secure-video'); ?>
+					<?php _e(
+						'This will include your video permissions, view ' .
+						'history, and analytics data.',
+						'vz-secure-video'
+					); ?>
 				</p>
 			</td>
 		</tr>

@@ -18,8 +18,12 @@ if (!defined('ABSPATH')) {
  */
 function vz_track_video_view() {
 		// Verify nonce
-		if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'vz_track_view')) {
-				wp_send_json_error(['message' => 'Invalid security token']);
+		if (!isset($_POST['nonce']) 
+				|| !wp_verify_nonce($_POST['nonce'], 'vz_track_view')
+		) {
+				wp_send_json_error(
+					['message' => 'Invalid security token']
+				);
 				return;
 		}
 		
@@ -37,7 +41,9 @@ function vz_track_video_view() {
 		
 		// Check if user has permission to view this video
 		if (!vz_user_can_view_video($post_id, $user_id)) {
-				wp_send_json_error(['message' => 'You do not have permission to view this video.']);
+				wp_send_json_error(
+					['message' => 'You do not have permission to view this video.']
+				);
 				return;
 		}
 		
@@ -65,7 +71,8 @@ function vz_track_video_view() {
 		]);
 }
 
-// Register AJAX handler for logged-in users only (guests cannot view secure videos)
+// Register AJAX handler for logged-in users only
+// (guests cannot view secure videos)
 add_action('wp_ajax_vz_track_video_view', 'vz_track_video_view');
 
 /**
@@ -170,7 +177,8 @@ function vz_update_view_cache($post_id) {
 		
 		if ($first_view && $user_id > 0) {
 				$wpdb->query($wpdb->prepare(
-						"UPDATE $table_cache SET unique_views = unique_views + 1 WHERE post_id = %d",
+						"UPDATE $table_cache SET unique_views = " .
+						"unique_views + 1 WHERE post_id = %d",
 						$post_id
 				));
 		}

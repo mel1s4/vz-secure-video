@@ -201,7 +201,7 @@ function vz_privacy_settings_page() {
   settings_errors('vz_privacy_messages');
 
   // Include modal template
-  include plugin_dir_path(__FILE__) . 'vz-privacy-templates-modal.php';
+  include plugin_dir_path(__FILE__) . 'vz-sv-privacy-templates-modal.php';
   ?>
   <div class="wrap">
     <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -348,7 +348,10 @@ function vz_privacy_settings_page() {
               <?php checked(get_option('vz_anonymize_ip'), 1); ?>
             >
             <label for="vz_anonymize_ip">
-              <?php _e('Anonymize IP addresses (last octet removed)', 'vz-secure-video'); ?>
+              <?php _e(
+                'Anonymize IP addresses (last octet removed)', 
+                'vz-secure-video'
+              ); ?>
             </label>
             <p class="description">
               <?php _e(
@@ -376,7 +379,10 @@ function vz_privacy_settings_page() {
               <?php checked(get_option('vz_track_user_agent'), 1); ?>
             >
             <label for="vz_track_user_agent">
-              <?php _e('Track user agents (browser/device info)', 'vz-secure-video'); ?>
+              <?php _e(
+                'Track user agents (browser/device info)', 
+                'vz-secure-video'
+              ); ?>
             </label>
             <p class="description">
               <?php _e(
@@ -509,7 +515,10 @@ function vz_privacy_settings_page() {
               <?php checked(get_option('vz_allow_data_export'), 1); ?>
             >
             <label for="vz_allow_data_export">
-              <?php _e('Allow users to export their data', 'vz-secure-video'); ?>
+              <?php _e(
+                'Allow users to export their data', 
+                'vz-secure-video'
+              ); ?>
             </label>
             <p class="description">
               <?php _e(
@@ -536,7 +545,10 @@ function vz_privacy_settings_page() {
               <?php checked(get_option('vz_allow_data_deletion'), 1); ?>
             >
             <label for="vz_allow_data_deletion">
-              <?php _e('Allow users to delete their data', 'vz-secure-video'); ?>
+              <?php _e(
+                'Allow users to delete their data', 
+                'vz-secure-video'
+              ); ?>
             </label>
             <p class="description">
               <?php _e(

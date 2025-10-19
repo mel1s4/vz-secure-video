@@ -29,10 +29,15 @@ function vz_delete_user_data($user_id, $anonymize_only = false) {
 	}
 	
 	// Check if user can delete their own data
-	if (!current_user_can('manage_options') && get_current_user_id() !== $user_id) {
+	if (!current_user_can('manage_options') 
+			&& get_current_user_id() !== $user_id
+	) {
 		return new WP_Error(
 			'permission_denied',
-			__('You do not have permission to delete this user\'s data.', 'vz-secure-video')
+			__(
+				'You do not have permission to delete this user\'s data.',
+				'vz-secure-video'
+			)
 		);
 	}
 	
@@ -239,20 +244,29 @@ function vz_is_data_deletion_enabled() {
  */
 function vz_ajax_delete_user_data() {
 	// Check nonce
-	if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'vz_delete_data')) {
-		wp_send_json_error(array('message' => __('Security check failed.', 'vz-secure-video')));
+	if (!isset($_POST['nonce']) 
+			|| !wp_verify_nonce($_POST['nonce'], 'vz_delete_data')
+	) {
+		wp_send_json_error(
+			array('message' => __('Security check failed.', 'vz-secure-video'))
+		);
 		return;
 	}
 	
-	$user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
-	$anonymize_only = isset($_POST['anonymize_only']) && $_POST['anonymize_only'] === '1';
+	$user_id = isset($_POST['user_id']) 
+			? intval($_POST['user_id']) 
+			: 0;
+	$anonymize_only = isset($_POST['anonymize_only']) 
+			&& $_POST['anonymize_only'] === '1';
 	
 	if (!$user_id) {
 		$user_id = get_current_user_id();
 	}
 	
 	if (!$user_id) {
-		wp_send_json_error(array('message' => __('Invalid user ID.', 'vz-secure-video')));
+		wp_send_json_error(
+			array('message' => __('Invalid user ID.', 'vz-secure-video'))
+		);
 		return;
 	}
 	
@@ -279,7 +293,9 @@ function vz_add_deletion_button_to_profile($user) {
 	}
 	
 	// Only show to admins or the user themselves
-	if (!current_user_can('manage_options') && get_current_user_id() !== $user->ID) {
+	if (!current_user_can('manage_options') 
+			&& get_current_user_id() !== $user->ID
+	) {
 		return;
 	}
 	
@@ -293,23 +309,45 @@ function vz_add_deletion_button_to_profile($user) {
 		<tr>
 			<th><?php _e('Delete Your Data', 'vz-secure-video'); ?></th>
 			<td>
-				<p><?php _e('Request deletion of all your video viewing data. This action cannot be undone.', 'vz-secure-video'); ?></p>
+				<p>
+					<?php _e(
+						'Request deletion of all your video viewing data. ' .
+						'This action cannot be undone.',
+						'vz-secure-video'
+					); ?>
+				</p>
 				
 				<p>
 					<label>
-						<input type="checkbox" id="vz-anonymize-only" value="1">
-						<?php _e('Anonymize instead of delete (keeps data for analytics but removes personal identifiers)', 'vz-secure-video'); ?>
+						<input 
+							type="checkbox" 
+							id="vz-anonymize-only" 
+							value="1"
+						>
+						<?php _e(
+							'Anonymize instead of delete (keeps data for ' .
+							'analytics but removes personal identifiers)',
+							'vz-secure-video'
+						); ?>
 					</label>
 				</p>
 				
 				<p>
-					<button type="button" class="button button-secondary" id="vz-delete-data-btn">
+					<button 
+						type="button" 
+						class="button button-secondary" 
+						id="vz-delete-data-btn"
+					>
 						<?php _e('Delete My Data', 'vz-secure-video'); ?>
 					</button>
 				</p>
 				
 				<p class="description">
-					<?php _e('This will permanently delete or anonymize your video permissions, view history, and analytics data.', 'vz-secure-video'); ?>
+					<?php _e(
+						'This will permanently delete or anonymize your ' .
+						'video permissions, view history, and analytics data.',
+						'vz-secure-video'
+					); ?>
 				</p>
 				
 				<?php
@@ -331,15 +369,30 @@ function vz_add_deletion_button_to_profile($user) {
 		$('#vz-delete-data-btn').on('click', function() {
 			var anonymizeOnly = $('#vz-anonymize-only').is(':checked');
 			var confirmMessage = anonymizeOnly
-				? '<?php echo esc_js(__('Are you sure you want to anonymize all your video data? This will remove personal identifiers but keep anonymized data for analytics.', 'vz-secure-video')); ?>'
-				: '<?php echo esc_js(__('Are you sure you want to permanently delete all your video data? This action cannot be undone.', 'vz-secure-video')); ?>';
+				? '<?php 
+					echo esc_js(__(
+						'Are you sure you want to anonymize all your video ' .
+						'data? This will remove personal identifiers but ' .
+						'keep anonymized data for analytics.',
+						'vz-secure-video'
+					)); 
+				?>'
+				: '<?php 
+					echo esc_js(__(
+						'Are you sure you want to permanently delete all ' .
+						'your video data? This action cannot be undone.',
+						'vz-secure-video'
+					)); 
+				?>';
 			
 			if (!confirm(confirmMessage)) {
 				return;
 			}
 			
 			// Show loading state
-			$(this).prop('disabled', true).text('<?php echo esc_js(__('Processing...', 'vz-secure-video')); ?>');
+			$(this).prop('disabled', true).text(
+				'<?php echo esc_js(__('Processing...', 'vz-secure-video')); ?>'
+			);
 			
 			$.ajax({
 				url: ajaxurl,
@@ -348,20 +401,50 @@ function vz_add_deletion_button_to_profile($user) {
 					action: 'vz_delete_user_data',
 					user_id: <?php echo $user->ID; ?>,
 					anonymize_only: anonymizeOnly ? 1 : 0,
-					nonce: '<?php echo wp_create_nonce('vz_delete_data'); ?>'
+					nonce: '<?php 
+						echo wp_create_nonce('vz_delete_data'); 
+					?>'
 				},
 				success: function(response) {
 					if (response.success) {
 						alert(response.data.message);
 						location.reload();
 					} else {
-						alert('<?php echo esc_js(__('Failed to delete data:', 'vz-secure-video')); ?> ' + response.data.message);
-						$('#vz-delete-data-btn').prop('disabled', false).text('<?php echo esc_js(__('Delete My Data', 'vz-secure-video')); ?>');
+						alert(
+							'<?php 
+								echo esc_js(__(
+									'Failed to delete data:', 
+									'vz-secure-video'
+								)); 
+							?> ' + response.data.message
+						);
+						$('#vz-delete-data-btn')
+							.prop('disabled', false)
+							.text('<?php 
+								echo esc_js(__(
+									'Delete My Data', 
+									'vz-secure-video'
+								)); 
+							?>');
 					}
 				},
 				error: function() {
-					alert('<?php echo esc_js(__('An error occurred. Please try again.', 'vz-secure-video')); ?>');
-					$('#vz-delete-data-btn').prop('disabled', false).text('<?php echo esc_js(__('Delete My Data', 'vz-secure-video')); ?>');
+					alert(
+						'<?php 
+							echo esc_js(__(
+								'An error occurred. Please try again.',
+								'vz-secure-video'
+							)); 
+						?>'
+					);
+					$('#vz-delete-data-btn')
+						.prop('disabled', false)
+						.text('<?php 
+							echo esc_js(__(
+								'Delete My Data', 
+								'vz-secure-video'
+							)); 
+						?>');
 				}
 			});
 		});

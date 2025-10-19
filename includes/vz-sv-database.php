@@ -44,7 +44,8 @@ function vz_secure_video_create_view_tables() {
 				post_id bigint(20) UNSIGNED NOT NULL,
 				total_views int(11) DEFAULT 0,
 				unique_views int(11) DEFAULT 0,
-				last_calculated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				last_calculated datetime DEFAULT CURRENT_TIMESTAMP 
+					ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY (post_id)
 		) $charset_collate;";
 		
@@ -90,13 +91,21 @@ function vz_secure_video_create_permissions_table() {
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql_permissions);
 		
-		// Add permission_id column to existing view_log table if it doesn't exist
+		// Add permission_id column to existing view_log table
 		$table_log = $wpdb->prefix . 'vz_video_view_log';
-		$column_exists = $wpdb->get_results("SHOW COLUMNS FROM $table_log LIKE 'permission_id'");
+		$column_exists = $wpdb->get_results(
+			"SHOW COLUMNS FROM $table_log LIKE 'permission_id'"
+		);
 		
 		if (empty($column_exists)) {
-				$wpdb->query("ALTER TABLE $table_log ADD COLUMN permission_id bigint(20) UNSIGNED DEFAULT NULL AFTER id");
-				$wpdb->query("ALTER TABLE $table_log ADD KEY permission_id (permission_id)");
+				$wpdb->query(
+					"ALTER TABLE $table_log ADD COLUMN permission_id " .
+					"bigint(20) UNSIGNED DEFAULT NULL AFTER id"
+				);
+				$wpdb->query(
+					"ALTER TABLE $table_log ADD KEY permission_id " .
+					"(permission_id)"
+				);
 		}
 }
 
@@ -108,8 +117,20 @@ function vz_secure_video_update_permissions_db_version() {
 }
 
 // Hook into activation
-register_activation_hook(VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php', 'vz_secure_video_create_view_tables');
-register_activation_hook(VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php', 'vz_secure_video_update_view_db_version');
-register_activation_hook(VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php', 'vz_secure_video_create_permissions_table');
-register_activation_hook(VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php', 'vz_secure_video_update_permissions_db_version');
+register_activation_hook(
+	VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php',
+	'vz_secure_video_create_view_tables'
+);
+register_activation_hook(
+	VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php',
+	'vz_secure_video_update_view_db_version'
+);
+register_activation_hook(
+	VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php',
+	'vz_secure_video_create_permissions_table'
+);
+register_activation_hook(
+	VZ_SECURE_VIDEO_PLUGIN_DIR . 'vz-secure-video.php',
+	'vz_secure_video_update_permissions_db_version'
+);
 

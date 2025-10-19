@@ -20,10 +20,17 @@ if (!defined('ABSPATH')) {
  * @param int $user_id User ID
  * @param int|null $view_limit Number of views allowed (NULL for unlimited)
  * @param int $granted_by User ID who granted permission
- * @param string|null $expires_at Expiration date/time (NULL for no expiration)
+ * @param string|null $expires_at Expiration date/time 
+ *                                  (NULL for no expiration)
  * @return int|false Permission ID or false on failure
  */
-function vz_grant_video_permission($post_id, $user_id, $view_limit = null, $granted_by = null, $expires_at = null) {
+function vz_grant_video_permission(
+	$post_id, 
+	$user_id, 
+	$view_limit = null, 
+	$granted_by = null, 
+	$expires_at = null
+) {
 		global $wpdb;
 		
 		// Validate inputs
@@ -131,7 +138,8 @@ function vz_user_can_view_video($post_id, $user_id = null) {
 		$table = $wpdb->prefix . 'vz_video_permissions';
 		
 		$permission = $wpdb->get_row($wpdb->prepare(
-				"SELECT * FROM $table WHERE post_id = %d AND user_id = %d AND status = 'active'",
+				"SELECT * FROM $table WHERE post_id = %d " .
+				"AND user_id = %d AND status = 'active'",
 				$post_id,
 				$user_id
 		));
@@ -181,7 +189,8 @@ function vz_get_remaining_views($post_id, $user_id = null) {
 		$table = $wpdb->prefix . 'vz_video_permissions';
 		
 		$permission = $wpdb->get_row($wpdb->prepare(
-				"SELECT view_limit, views_used FROM $table WHERE post_id = %d AND user_id = %d AND status = 'active'",
+				"SELECT view_limit, views_used FROM $table " .
+				"WHERE post_id = %d AND user_id = %d AND status = 'active'",
 				$post_id,
 				$user_id
 		));
@@ -220,7 +229,8 @@ function vz_record_video_view($post_id, $user_id = null) {
 		
 		// Get permission
 		$permission = $wpdb->get_row($wpdb->prepare(
-				"SELECT * FROM $table_permissions WHERE post_id = %d AND user_id = %d AND status = 'active'",
+				"SELECT * FROM $table_permissions WHERE post_id = %d " .
+				"AND user_id = %d AND status = 'active'",
 				$post_id,
 				$user_id
 		));
