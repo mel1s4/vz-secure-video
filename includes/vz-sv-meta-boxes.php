@@ -119,6 +119,13 @@ function vz_secure_video_save_resources($post_id) {
 				return;
 		}
 		
+		// Handle public access setting
+		if (isset($_POST['vz_video_public_access'])) {
+				update_post_meta($post_id, '_vz_video_public_access', '1');
+		} else {
+				delete_post_meta($post_id, '_vz_video_public_access');
+		}
+		
 		// Handle video file (MP4, WebM, OGG, etc.)
 		$old_video_file_id = get_post_meta(
 				$post_id,

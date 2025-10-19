@@ -47,8 +47,16 @@ function vz_track_video_view() {
 				return;
 		}
 		
-		// Record the view using permissions system
-		$success = vz_record_video_view($post_id, $user_id);
+		// Check if video is public
+		$is_public = get_post_meta($post_id, '_vz_video_public_access', true);
+		
+		if ($is_public === '1') {
+				// For public videos, record view without permission check
+				$success = vz_record_public_video_view($post_id, $user_id);
+		} else {
+				// For secure videos, record the view using permissions system
+				$success = vz_record_video_view($post_id, $user_id);
+		}
 		
 		if (!$success) {
 				wp_send_json_error(['message' => 'Failed to record view']);
@@ -56,11 +64,11 @@ function vz_track_video_view() {
 		}
 		
 		// Update cache (increment counts)
-		vz_update_view_cache($post_id);
+		vz_update_view_cache($post_id, $user_id);
 		
 		// Get updated counts and remaining views
 		$counts = vz_get_video_view_counts($post_id);
-		$remaining = vz_get_remaining_views($post_id, $user_id);
+		$remaining = $is_public === '1' ? null : vz_get_remaining_views($post_id, $user_id);
 		
 		// Return success with counts and remaining views
 		wp_send_json_success([
@@ -71,9 +79,10 @@ function vz_track_video_view() {
 		]);
 }
 
-// Register AJAX handler for logged-in users only
-// (guests cannot view secure videos)
+// Register AJAX handler for both logged-in and non-logged-in users
+// (for public videos)
 add_action('wp_ajax_vz_track_video_view', 'vz_track_video_view');
+add_action('wp_ajax_nopriv_vz_track_video_view', 'vz_track_video_view');
 
 /**
  * Get view counts for a video (from cache or calculate)
@@ -151,10 +160,15 @@ function vz_calculate_and_cache_views($post_id) {
  * Update view cache for a video (increment counts)
  * 
  * @param int $post_id The video post ID
+ * @param int|null $user_id The user ID (optional)
  */
-function vz_update_view_cache($post_id) {
+function vz_update_view_cache($post_id, $user_id = null) {
 		global $wpdb;
 		$table_cache = $wpdb->prefix . 'vz_video_view_cache';
+		
+		if (!$user_id) {
+				$user_id = get_current_user_id();
+		}
 		
 		// Increment total views
 		$wpdb->query($wpdb->prepare(
@@ -165,7 +179,6 @@ function vz_update_view_cache($post_id) {
 		));
 		
 		// Update unique views if needed
-		$user_id = get_current_user_id();
 		$table_log = $wpdb->prefix . 'vz_video_view_log';
 		
 		// Check if this is user's first view

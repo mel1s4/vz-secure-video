@@ -119,6 +119,12 @@ function vz_revoke_video_permission($post_id, $user_id) {
  * @return bool True if user can view
  */
 function vz_user_can_view_video($post_id, $user_id = null) {
+		// Check if video is set to public access
+		$is_public = get_post_meta($post_id, '_vz_video_public_access', true);
+		if ($is_public === '1') {
+				return true;
+		}
+		
 		// Admins always have access
 		if (current_user_can('manage_options')) {
 				return true;
@@ -129,7 +135,7 @@ function vz_user_can_view_video($post_id, $user_id = null) {
 				$user_id = get_current_user_id();
 		}
 		
-		// Guests cannot view
+		// Guests cannot view (unless video is public)
 		if (!$user_id) {
 				return false;
 		}
@@ -262,6 +268,37 @@ function vz_record_video_view($post_id, $user_id = null) {
 		);
 		
 		return true;
+}
+
+/**
+ * Record a public video view (no permission required)
+ * 
+ * @param int $post_id Video post ID
+ * @param int|null $user_id User ID (0 for guests)
+ * @return bool Success status
+ */
+function vz_record_public_video_view($post_id, $user_id = null) {
+		if (!$user_id) {
+				$user_id = get_current_user_id();
+		}
+		
+		global $wpdb;
+		$table_log = $wpdb->prefix . 'vz_video_view_log';
+		
+		// Log the view (permission_id is NULL for public videos)
+		$result = $wpdb->insert(
+				$table_log,
+				array(
+						'permission_id' => null,
+						'post_id' => $post_id,
+						'user_id' => $user_id,
+						'ip_address' => $_SERVER['REMOTE_ADDR'] ?? '',
+						'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? ''
+				),
+				array('%d', '%d', '%d', '%s', '%s')
+		);
+		
+		return $result !== false;
 }
 
 /**

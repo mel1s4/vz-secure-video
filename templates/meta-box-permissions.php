@@ -12,9 +12,39 @@ if (!defined('ABSPATH')) {
 
 // Get existing permissions
 $permissions = vz_get_video_permissions($post_id);
+
+// Get public access setting
+$is_public = get_post_meta($post_id, '_vz_video_public_access', true);
 ?>
 
 <div class="vz-permissions-container">
+	<!-- Public Access Setting -->
+	<div class="vz-public-access" style="margin-bottom: 30px; padding: 15px; background: #f0f0f1; border-left: 4px solid #2271b1;">
+		<h3 style="margin-top: 0;"><?php _e('Access Control', 'vz-secure-video'); ?></h3>
+		<table class="form-table">
+			<tr>
+				<th scope="row">
+					<label for="vz_video_public_access">
+						<?php _e('Public Access', 'vz-secure-video'); ?>
+					</label>
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" 
+									 name="vz_video_public_access" 
+									 id="vz_video_public_access" 
+									 value="1" 
+									 <?php checked($is_public, '1'); ?> />
+						<?php _e('Make this video publicly accessible with no restrictions', 'vz-secure-video'); ?>
+					</label>
+					<p class="description">
+						<?php _e('When enabled, anyone can view this video without logging in or requiring specific permissions. Individual user permissions below will be ignored.', 'vz-secure-video'); ?>
+					</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 	<!-- Add User Permission -->
 	<div class="vz-add-permission" style="margin-bottom: 20px;">
 		<h3><?php _e('Grant Access', 'vz-secure-video'); ?></h3>
